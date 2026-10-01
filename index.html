@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกมวาดรูปตามแบบ (Copy Drawing Game)</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="วาดตามแบบ">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>🎨 เกมวาดรูปตามแบบ</h1>
+    <p>วาดรูปฝั่งขวาให้เหมือนรูปต้นแบบฝั่งซ้ายให้มากที่สุดก่อนเวลาจะหมด!</p>
+    <div class="header-actions">
+      <span class="best" id="bestScore">สถิติสูงสุด: -</span>
+      <button id="installBtn" class="btn btn-secondary" hidden>📲 ติดตั้งแอพ</button>
+    </div>
+  </div>
+
+  <div class="game-info">
+    <div class="level-badge" id="levelBadge">ด่านที่ 1 / 5</div>
+    <div class="timer-container">
+      <div class="timer-label" id="timerLabel">⏱️ เวลาเหลือ: 30 วินาที</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="canvas-card">
+      <div class="card-header">🖼️ ภาพต้นแบบ</div>
+      <canvas id="targetCanvas" width="300" height="300"></canvas>
+    </div>
+
+    <div class="canvas-card">
+      <div class="card-header">✏️ กระดานวาดของคุณ</div>
+      <canvas id="drawCanvas" width="300" height="300"></canvas>
+      
+      <div class="toolbar">
+        <div class="tool-group">
+          <label>สี:</label>
+          <input type="color" id="colorPicker" value="#000000">
+        </div>
+        <div class="tool-group">
+          <label>ขนาดแปรง:</label>
+          <input type="range" id="brushSize" min="2" max="20" value="5">
+          <span id="brushSizeVal">5px</span>
+        </div>
+        <button id="eraserBtn" class="btn btn-secondary">🧽 ยางลบ</button>
+        <button id="clearBtn" class="btn btn-danger">🗑️ ล้างกระดาน</button>
+      </div>
+
+      <button id="submitBtn" class="btn btn-success btn-block">ส่งผลงานทันที 🚀</button>
+    </div>
+  </div>
+
+  <!-- Modal แสดงผลคะแนน -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+      <h2 id="modalTitle">หมดเวลา! ⏰</h2>
+      <div class="score-circle">
+        <span id="scoreText">0%</span>
+      </div>
+      <p id="modalDesc">กำลังโหลดด่านถัดไป...</p>
+      <button id="nextBtn" class="btn btn-primary btn-block">ไปด่านถัดไป ➔</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+
+  <!-- ลงทะเบียน Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Service Worker Registered!', reg))
+          .catch((err) => console.log('Service Worker Registration Failed!', err));
+      });
+    }
+  </script>
+</body>
+</html>
